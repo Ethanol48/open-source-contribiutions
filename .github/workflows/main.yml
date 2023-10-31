@@ -1,5 +1,7 @@
 on: 
   workflow_dispatch:
+env:
+  AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
 jobs:
   hello_world_job:
     runs-on: ubuntu-latest
@@ -12,8 +14,6 @@ jobs:
           who-to-greet: 'Ethan'
       # Use the output from the `hello` step
       - name: Get the output time
-        env:
-          AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
         run: echo "The time was ${{ steps.hello.outputs.time }}"
 
 
