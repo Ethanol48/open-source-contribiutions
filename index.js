@@ -6,6 +6,12 @@ const { Toolkit } = require("actions-toolkit");
 
 const GH_USERNAME = "Ethanol48";
 
+AUTH = core.getInput("AUTH_TOKEN")
+
+if (!AUTH) {
+  console.log("NO LO LEE")
+}
+
 Toolkit.run(
   async (tools) => {
     tools.log.debug(`Getting activity for ${GH_USERNAME}`);
@@ -23,7 +29,7 @@ Toolkit.run(
   },
   {
     event: ["workflow_dispatch"],
-    secrets: ["AUTH_TOKEN"],
+    secrets: [AUTH_TOKEN],
   }
 );
 
