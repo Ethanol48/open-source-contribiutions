@@ -8,7 +8,7 @@ const { Toolkit } = require("actions-toolkit");
 Toolkit.run(async (tools) => {
   tools.log.debug(`Getting activity for ${GH_USERNAME}`);
   const events = await tools.github.activity.listPublicEventsForUser({
-    username: GH_USERNAME,
+    username: "Ethanol48",
     per_page: 100,
   });
 
@@ -18,8 +18,6 @@ Toolkit.run(async (tools) => {
 
   console.log(events[0]);
   console.log(events[100]);
-
-
 
 });
 
