@@ -15,6 +15,7 @@ Toolkit.run(
   async (tools) => {
     tools.log.debug(`Getting activity for ${GH_USERNAME}`);
 
+    let num = 1;
 
     while (true) {
 
@@ -39,11 +40,6 @@ Toolkit.run(
     tools.log.debug(
       `Activity for ${GH_USERNAME}, ${allEvents.length} events found.`
     );
-    
-    JSON.stringify()
-
-    tools.log.debug(`event 0: ${JSON.stringify(events.data[0])}`);
-    tools.log.debug(`event 100: ${JSON.stringify(events.data[99])}`);
   },
   {
     event: ["workflow_dispatch"],
