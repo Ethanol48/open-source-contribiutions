@@ -24,9 +24,10 @@ Toolkit.run(
       `Activity for ${GH_USERNAME}, ${events.data.length} events found.`
     );
     
-    
-    tools.log.debug(`event 0: ${events.data[0]}`);
-    tools.log.debug(`event 100: ${events.data[100]}`);
+    JSON.stringify()
+
+    tools.log.debug(`event 0: ${JSON.stringify(events.data[0])}`);
+    tools.log.debug(`event 100: ${JSON.stringify(events.data[99])}`);
   },
   {
     event: ["workflow_dispatch"],
