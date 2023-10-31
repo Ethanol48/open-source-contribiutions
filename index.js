@@ -73,6 +73,8 @@ async function main() {
   const data = await getPaginatedData("/users/Ethanol48/received_events/public");
 
   console.log("length of data: ", data.length);
+  console.log("first item of data: ", data[0]);
+  console.log("last item of data: ", data[data.length - 1]);
 }
 
 main();
