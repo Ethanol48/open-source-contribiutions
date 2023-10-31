@@ -6,8 +6,6 @@ const { Toolkit } = require("actions-toolkit");
 
 const GH_USERNAME = "Ethanol48";
 
-const AUTH = core.getState("AUTH_TOKEN")
-
 const time = (new Date()).toTimeString();
 core.setOutput("time", time);
 
@@ -28,7 +26,7 @@ Toolkit.run(
   },
   {
     event: ["workflow_dispatch"],
-    secrets: [AUTH],
+    secrets: ["GITHUB_TOKEN"],
   }
 );
 
