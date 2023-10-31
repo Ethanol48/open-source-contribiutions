@@ -1,7 +1,7 @@
 on: 
   workflow_dispatch:
 env:
-  AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.AUTH_TOKEN }}
 jobs:
   hello_world_job:
     runs-on: ubuntu-latest
