@@ -9,19 +9,35 @@ const GH_USERNAME = "Ethanol48";
 const time = (new Date()).toTimeString();
 core.setOutput("time", time);
 
+let allEvents = []
+
 Toolkit.run(
   async (tools) => {
     tools.log.debug(`Getting activity for ${GH_USERNAME}`);
-    const events = await tools.github.activity.listPublicEventsForUser({
-      username: GH_USERNAME,
-      per_page: 100,
-    });
 
 
-    
+    while (true) {
+
+
+      const events = await tools.github.activity.listPublicEventsForUser({
+        username: GH_USERNAME,
+        per_page: 100,
+        page: num
+      });
+
+      num++;
+
+      if (events.data.length === 0) {
+        break
+      } else {
+        for (let i = 0; i < events.data.length; i++) {
+          allEvents.push(events.data[i])
+        }
+      }
+    }    
 
     tools.log.debug(
-      `Activity for ${GH_USERNAME}, ${events.data.length} events found.`
+      `Activity for ${GH_USERNAME}, ${allEvents.length} events found.`
     );
     
     JSON.stringify()
