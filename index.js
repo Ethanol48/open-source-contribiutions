@@ -26,7 +26,7 @@ Toolkit.run(
   },
   {
     event: ["workflow_dispatch"],
-    secrets: [env.AUTH_TOKEN],
+    secrets: [AUTH_TOKEN],
   }
 );
 
