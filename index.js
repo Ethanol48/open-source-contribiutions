@@ -3,7 +3,6 @@ const fs = require("fs");
 const path = require("path");
 const { spawn } = require("child_process");
 const { Octokit } = require("octokit")
-import { Octokit } from "octokit";
 
 
 const GH_USERNAME = "Ethanol48";
