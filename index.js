@@ -2,63 +2,75 @@ const core = require("@actions/core");
 const fs = require("fs");
 const path = require("path");
 const { spawn } = require("child_process");
-const { Toolkit } = require("actions-toolkit");
+const { Octokit } = require("octokit")
+import { Octokit } from "octokit";
+
 
 const GH_USERNAME = "Ethanol48";
 
-const time = (new Date()).toTimeString();
+const time = new Date().toTimeString();
 core.setOutput("time", time);
 
-let allEvents = []
-
-Toolkit.run(
-  async (tools) => {
-    tools.log.debug(`Getting activity for ${GH_USERNAME}`);
-
-    let num = 1;
-
-    while (true) {
+let allEvents = [];
 
 
-      const events = await tools.github.activity.listPublicEventsForUser({
-        username: GH_USERNAME,
-        per_page: 100,
-        page: num
-      });
 
-      num++;
+const octokit = new Octokit({ });
 
-      if (events.data.length === 0) {
-        break
-      } else {
-        for (let i = 0; i < events.data.length; i++) {
-          allEvents.push(events.data[i])
-        }
-      }
-    }    
+async function getPaginatedData(url) {
+  const nextPattern = /(?<=<)([\S]*)(?=>; rel="Next")/i;
+  let pagesRemaining = true;
+  let data = [];
 
-    tools.log.debug(
-      `Activity for ${GH_USERNAME}, ${allEvents.length} events found.`
-    );
-  },
-  {
-    event: ["workflow_dispatch"],
-    secrets: ["GITHUB_TOKEN"],
+  while (pagesRemaining) {
+    const response = await octokit.request(`GET ${url}`, {
+      per_page: 100,
+      headers: {
+        "X-GitHub-Api-Version":
+          "2022-11-28",
+      },
+    });
+
+    const parsedData = parseData(response.data)
+    data = [...data, ...parsedData];
+
+    const linkHeader = response.headers.link;
+
+    pagesRemaining = linkHeader && linkHeader.includes(`rel=\"next\"`);
+
+    if (pagesRemaining) {
+      url = linkHeader.match(nextPattern)[0];
+    }
   }
-);
 
-// try {
-//   // `who-to-greet` input defined in action metadata file
-//   const nameToGreet = core.getInput('who-to-greet');
-//   console.log(`Hello ${nameToGreet}!`);
-//   const time = (new Date()).toTimeString();
-//   core.setOutput("time", time);
+  return data;
+}
 
-//   console.log("This is the index file")
+function parseData(data) {
+  // If the data is an array, return that
+    if (Array.isArray(data)) {
+      return data
+    }
 
-//   // Get the JSON webhook payload for the event that triggered the workflow
-//   const payload = JSON.stringify(github.context.payload, undefined, 2)
-//   console.log(`The event payload: ${payload}`);
-// } catch (error) {
-//   core.setFailed(error.message);
-// }
+  // Some endpoints respond with 204 No Content instead of empty array
+  //   when there is no data. In that case, return an empty array.
+  if (!data) {
+    return []
+  }
+
+  // Otherwise, the array of items that we want is in an object
+  // Delete keys that don't include the array of items
+  delete data.incomplete_results;
+  delete data.repository_selection;
+  delete data.total_count;
+  // Pull out the array of items
+  const namespaceKey = Object.keys(data)[0];
+  data = data[namespaceKey];
+
+  return data;
+}
+
+const data = await getPaginatedData("/users/Ethanol48/received_events/public");
+
+console.log(data);
+
