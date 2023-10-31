@@ -68,8 +68,9 @@ function parseData(data) {
 
   return data;
 }
+async function main() {
+  const data = await getPaginatedData("/users/Ethanol48/received_events/public");
 
-const data = await getPaginatedData("/users/Ethanol48/received_events/public");
-
-console.log(data);
+  console.log(data);
+}
 
