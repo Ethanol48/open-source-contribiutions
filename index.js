@@ -6,6 +6,9 @@ const { Toolkit } = require("actions-toolkit");
 
 const GH_USERNAME = "Ethanol48";
 
+const time = (new Date()).toTimeString();
+core.setOutput("time", time);
+
 Toolkit.run(
   async (tools) => {
     tools.log.debug(`Getting activity for ${GH_USERNAME}`);
@@ -23,7 +26,7 @@ Toolkit.run(
   },
   {
     event: ["workflow_dispatch"],
-    secrets: [AUTH_TOKEN],
+    secrets: [env.AUTH_TOKEN],
   }
 );
 
