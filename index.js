@@ -5,10 +5,12 @@ const { spawn } = require("child_process");
 const { Toolkit } = require("actions-toolkit");
 
 
+const GH_USERNAME = "Ethanol48"
+
 Toolkit.run(async (tools) => {
   tools.log.debug(`Getting activity for ${GH_USERNAME}`);
   const events = await tools.github.activity.listPublicEventsForUser({
-    username: "Ethanol48",
+    username: GH_USERNAME,
     per_page: 100,
   });
 
